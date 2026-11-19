@@ -4,7 +4,7 @@ This package sits beside the original LLM-Check code (common_utils.py,
 utils_*.py, run_detection_combined.py), which is kept untouched as the
 reference implementation. Everything new for the project lives here.
 
-Layout (filled in phase by phase, see docs/ROADMAP.md):
+Layout (filled in phase by phase, see PROJECT_README.md):
     models.py          reader-model registry, loading, chat-template encoding
     data/ragtruth.py   RAGTruth download + join (Phase 0), sentence labels (Phase 1)
     eval/metrics.py    AUROC and related metrics
