@@ -1,0 +1,7 @@
+task_type,official,responses,halluc_responses,sentences,halluc_sentences,halluc_response_rate,halluc_sentence_rate
+Data2txt,test,900,579,8235,936,0.643,0.114
+Data2txt,train,5298,3675,48933,6931,0.694,0.142
+QA,test,900,160,5785,369,0.178,0.064
+QA,train,5034,1564,36857,3768,0.311,0.102
+Summary,test,900,204,4991,258,0.227,0.052
+Summary,train,4758,1482,26954,1783,0.311,0.066
