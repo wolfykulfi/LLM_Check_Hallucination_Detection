@@ -1,0 +1,9 @@
+# Phase 0: same run as phase0_llama32_3b.yaml with qwen2.5-3b as reader (not gated, no HF token needed).
+reader: qwen2.5-3b
+task: Summary
+generator: llama-2-7b-chat   # same answers the original utils_ragtruth.py scored
+split: train
+n_samples: 200
+scores: [logit, attns]
+max_tokens: 2048
+seed: 0
