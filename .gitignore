@@ -7,3 +7,4 @@ data/ragtruth/
 data/ragbench/
 # large feature caches; small CSV result tables are committed
 results/**/*.parquet
+data/processed/

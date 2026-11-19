@@ -16,7 +16,9 @@ evaluated on RAGTruth and RAGBench's five domains.
 rag_halluc/
   models.py               reader registry (Qwen2.5, Llama-3.2, Gemma-2), eager-attention loading,
                           chat-template encoding with exact answer token span
-  data/ragtruth.py        download + join RAGTruth (response.jsonl x source_info.jsonl)
+  claims/split.py         spaCy sentence split with exact character offsets
+  data/ragtruth.py        download + join RAGTruth; source-grouped val split; sentence labels
+  data/build_ragtruth.py  Phase 1: writes the response and sentence parquet tables + stats CSVs
   eval/metrics.py         AUROC (label 1 = hallucinated), direction, balanced acc, TPR@5%FPR
   repro/phase0_llmcheck.py  Phase 0: original LLM-Check scores with a small reader
 configs/                  one YAML per experiment
@@ -31,10 +33,12 @@ results/                  CSV result tables written by code (never typed by hand
 ```bash
 pip install -r requirements.txt
 python -m pytest tests -q                       # CPU, a few seconds, no internet needed
+python -m spacy download en_core_web_sm
+python -m rag_halluc.data.build_ragtruth        # Phase 1 tables, CPU, ~3 minutes
 python -m rag_halluc.repro.phase0_llmcheck --config configs/phase0_qwen25_3b.yaml   # needs a GPU
 ```
 
-On Kaggle or Colab, open `notebooks/phase0_reproduce_llmcheck.ipynb` and run all
+On Kaggle or Colab, open `notebooks/kaggle_runs.ipynb` and run all
 cells (Accelerator: GPU T4, Internet: on). RAGTruth is downloaded automatically
 from its GitHub repo into `data/ragtruth/`.
 
@@ -43,14 +47,16 @@ from its GitHub repo into `data/ragtruth/`.
 | Phase | What | Status |
 |---|---|---|
 | 0 | Setup; reproduce LLM-Check logit + attention scores on 200 RAGTruth Summary answers with a small reader | code done, run on Kaggle |
-| 1 | Data pipeline: all tasks and generators, source-grouped validation split, sentence labels and token spans | next |
-| 2 | Per-sentence internal features incl. context-aware attention and lookback ratio; AUROC vs reader size (Review 1) | |
+| 1 | Data pipeline: all tasks and generators, source-grouped validation split, sentence labels and token spans | done (RAGBench loader moves to Phase 5, where it is used) |
+| 2 | Per-sentence internal features incl. context-aware attention and lookback ratio; AUROC vs reader size (Review 1) | next |
 | 3 | NLI checkers (MiniCheck, DeBERTa, HHEM) and baselines (Cheung, LettuceDetect, observer probe) | |
 | 4 | Fusion probe, cascade, ablations, bootstrap CIs (Review 2) | |
 | 5 | Repair loop and RAGBench transfer | |
 | 6 | Gradio demo, final evaluation, report | |
 
-Phase 0 explanations of every score: [docs/phase0_scores_explained.md](docs/phase0_scores_explained.md).
+Explanations for the report and viva:
+* Phase 0, every LLM-Check score: [docs/phase0_scores_explained.md](docs/phase0_scores_explained.md)
+* Phase 1, the data pipeline and its numbers: [docs/phase1_data_pipeline.md](docs/phase1_data_pipeline.md)
 
 ## Reproducibility rules
 
